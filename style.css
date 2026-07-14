@@ -1,0 +1,167 @@
+@import url('https://fonts.googleapis.com/css?family=Aclonica&display=swap');
+
+table, th, td {
+  border-style: solid;
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+td {
+  border-style:hidden;
+}
+
+tr {
+  border-style:hidden;
+}
+
+area {
+  cursor: default;
+}
+
+.wrapper {
+  overflow: hidden;
+  background-color: black;
+  height: 400px;
+  width: 1050px;
+}
+
+.imageFrame {
+  background: url("scenes/scene51.jpg") repeat-x;
+  height: 1000px;
+  width: 720px;
+  /*animation: myslide 60s linear infinite;*/
+}
+
+@keyframes myslide {
+  0%{
+    transform: translate3d(0, 0, 0);
+  }
+  100%{
+    transform: translate3d(0, -1692px, 0);
+  }
+}
+
+.page {
+  height: 950px;
+  width: 1395px;
+  background-color: #640046;
+  font-family:Aclonica;
+  align-items: center;
+  justify-content: center;
+  border: solid 3px black;
+}
+
+.dashboard {
+  height: 500px;
+  width: 1300;
+  background-color:black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 0px;
+  border-bottom: 0px;
+  margin-bottom: -30px;
+  margin-left: 45px;
+  box-shadow: 0px 0px 5px 12px black;
+}
+
+.inventory {
+  height: 430px;
+  width: 100px;
+  align-items: center;
+  background-color: #ffe084;
+  margin-left: 10px;
+  border-style: inset;
+}
+
+.inventoryCell {
+  height: 80px;
+  width: 80px;
+}
+
+.purseImage {
+  height: 70px;
+  width: 80px;
+}
+
+.inventoryPicture {
+  height: 84px;
+  width: 84px;
+}
+
+.healthPoints {
+  float: left;
+  width: 50px;
+  height: 428px;
+  margin-right: 10px;
+  margin-left: 10px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  border-style:inset;
+  background-color: black;
+  vertical-align: bottom;
+}
+
+.characterInfo {
+  width:175px;
+  padding: 20px;
+  background-color:black;
+}
+
+.headers {
+  background-color: black;
+  width:1240px;
+  height: 25px;
+  padding-top: 0px;
+  line-height: 0px;
+  margin-left: 35px;
+}
+
+.bottomPane {
+  width: 1330px;
+  height: 275px;
+  background-color: #640046;
+  margin-top: 32px;
+  margin-left: 30px;
+  display: flex;
+  align-items:center;
+}
+
+.description {
+  height: 235px;
+  width: 955px;
+  background-color:#ffe084;
+  border-style: solid;
+  padding: 15px;
+  margin-top: -20px;
+  margin-left: 40px;
+  align-items: center;
+  text-align: left;
+  font-size : 18px;
+}
+
+.menu {
+  width: 1000px;
+  height: 200px;
+  text-align: left;
+}
+
+.button {
+  background-color: #ffe084;
+  border: none;
+  color: darkgreen;
+  padding: 4px 4px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-family:Aclonica;
+  font-size: 10px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color:white ;
+  color: #4CAF50;
+}
