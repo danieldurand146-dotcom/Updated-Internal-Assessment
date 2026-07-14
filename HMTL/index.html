@@ -1,0 +1,214 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href = "style.css">
+</head>
+
+<body>
+<!-- defines the whole view of the user interface -->
+<div class = "page" id = "pageBackground">
+  <h1 style="text-shadow: red 0.1em 0.1em 0.2em; font-size: 50px; color: #fccd10;"><center>The Treasure of Izentarth, the Last Fire Breather</center></h1> 
+
+  <!-- defines the dashboard (the upper part of the user interface) -->
+  <div class = "dashboard" align="center">
+    <div class = "inventory" id = "inventory">
+      <table style="width:100px; height:275px;">
+        <tr>
+          <td class="inventoryCell" align="center">
+          <img class=inventoryPicture src = "pictures/emptyInventory.png" id = "inventoryImg5" align="center" valign="middle">
+          </td>
+        </tr>
+        <tr>
+          <td class="inventoryCell" align="center">
+          <img class=inventoryPicture src = "pictures/emptyInventory.png" id = "inventoryImg4" align="center" valign="middle">
+          </td>
+        </tr>
+        <tr>
+          <td class="inventoryCell" align="center">
+          <img class=inventoryPicture src = "pictures/emptyInventory.png" id = "inventoryImg3" onclick="clickInventoryImg3()" align="center" valign="middle">
+          </td>
+        </tr>
+        <tr>
+          <td class="inventoryCell" align="center">
+          <img class=inventoryPicture src = "pictures/emptyInventory.png" id = "map" onmouseover="mouseOverMap()" onmouseout="mouseOutMap()" align="center" valign="middle">
+          </td> 
+        </tr>
+        <tr>
+          <td class="purseImage" align="center">
+          <img class=inventoryPicture src="purse/purse.png" id = "purse" onmouseover="mouseOverPurse()" onmouseout="mouseOutPurse()" valign="middle" align="center">
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- draws the protagonist's health points -->
+    <div class = "healthPoints" id = "hpPane" style = "visibility: hidden;">
+      <table>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp29" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp28" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp27" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp26" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp25" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp24" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp23" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp22" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp21" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp20" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp19" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp18" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp17" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp16" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp15" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp14" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp13" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp12" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp11" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp10" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp9" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp8" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp7" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp6" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp5" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp4" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp3" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp2" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "hp1" width="45px" align="center" valign="bottom"></td></tr>
+      </table>
+    </div>
+
+    <!-- draws the protagonist's characteristics -->
+    <div class=characterInfo>
+      <table align="center" valign="top" style="border: 1px solid black;">
+        <tr><td>
+            <img src = "pictures/blank.png" id = "characterFace" width="110" align="center" valign="top">
+        </td></tr>
+        <tr><td>
+            <p id = "characterName" style="color:#ffffa0; text-align:center;"></p>
+        </td></tr>
+        <tr><td>
+            <img src = "pictures/blank.png" id = "characterWeapon" width="110" align="center" valign="top">
+        </td></tr>  
+        <tr><td>
+            <p id = "weaponName" style="color:#ffffa0; text-align:center;"></p>
+        </td></tr>
+        <tr><td>
+            <img src = "pictures/blank.png" id = "characterProtection" width="110" align="center" valign="top">
+        </td></tr>  
+        <tr><td>
+            <p id = "protectionName" style="color:#ffffa0; text-align:center;"></p>
+        </td></tr>
+      </table>
+    </div>
+
+    <!-- draws the box that delimits the boundaries of the view -->
+    <div class="wrapper">
+      <div class="imageFrame" id="imgFrame" style="width:720px; height:400px;">
+        <!-- displays a view of first person perspective -->
+        <img src="" id="view" width="720px" height="400px" valign="bottom" align="left" usemap="#dragonMap">
+        <!-- delimits the boundaries of the dragon's clickable areas (for combats) -->
+        <map name="dragonMap">
+          <area shape="poly" id="leftHorn" coords="309,130,309,105,325,76,330,124" alt="leftHorn" style="cursor:default;" onclick="hitLeftHorn()">
+          <area shape="poly" id="rightHorn" coords="392,74,409,106,408,127,391,124" alt="rightHorn" style="cursor:default;" onclick="hitRightHorn()">
+          <area shape="poly" id="forehead" coords="358,125,389,142,359,184,328,145" alt="forehead" style="cursor:default;" onclick="hitForehead()">
+          <area shape="poly" id="leftEye" coords="330,168,343,184,331,184" alt="leftEye" style="cursor:default;" onclick="hitEyes()">
+          <area shape="poly" id="rightEye" coords="385,171,388,186,370,185" alt="rightEye" style="cursor:default;" onclick="hitEyes()">
+          <area shape="poly" id="leftWing" coords="239,0,308,2,250,77,315,56,237,171,250,205,80,267,80,239,0,307,0,202,139,60" alt="leftWing" style="cursor:default;" onclick="hitWings()">
+          <area shape="poly" id="rightWing" coords="423,0,545,0,720,137,720,263,455,189,464,66" alt="rightWing" style="cursor:default;" onclick="hitWings()">
+          <area shape="poly" id="mouth" coords="336,204,383,204,367,251,350,252" alt="mouth" style="cursor:default;" onclick="hitMouth()">
+          <area shape="poly" id="rightArm" coords="409,196,452,196,446,278,484,319,437,333,384,324,410,282" alt="rightArm" style="cursor:default;" onclick="hitRightArm()">
+        </map>
+      </div>
+    </div>
+
+    <!-- draws the enemy's characteristics -->
+    <div class=characterInfo>
+      <table align="center" valign="top" style="border: 1px solid black;">
+        <tr><td>
+            <img src = "pictures/blank.png" id = "enemyFace" width="110" align="center" valign="top">
+        </td></tr>  
+        <tr><td>
+            <p id = "enemyName" style="color:#ffffa0; text-align:center;"></p>
+        </td></tr>
+        <tr><td>
+            <img src = "pictures/blank.png" id = "enemyWeapon" width="110" align="center" valign="top">
+        </td></tr>  
+        <tr><td>
+            <p id = "enemyWeaponName" style="color:#ffffa0; text-align:center;"></p>
+        </td></tr>
+        <tr><td>
+            <img src = "pictures/blank.png" id = "enemyProtection" width="110" align="center" valign="top">
+        </td></tr>  
+        <tr><td>
+            <p id = "enemyProtectionName" style="color:#ffffa0; text-align:center;"></p>
+        </td></tr>
+      </table>
+    </div>
+    <!-- draws the enemy's health points -->
+    <div class=healthPoints id = "enemyHpPane">
+      <table style="border: hidden;">
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp29" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp28" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp27" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp26" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp25" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp24" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp23" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp22" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp21" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp20" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp19" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp18" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp17" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp16" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp15" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp14" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp13" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp12" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp11" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp10" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp9" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp8" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp7" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp6" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp5" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp4" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp3" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp2" width="45px" align="center" valign="bottom"></td></tr>
+      <tr><td><img src="pictures/noHpBlack.jpg" id = "enemyHp1" width="45px" align="center" valign="bottom"></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class = "headers" id = "headers">
+    <p id = "agilityPoints" style="color: #ffffa0; white-space: pre;" text-align= "top">       inventory        HP              agility: </p>
+  </div>
+
+  <!-- defines the lower part of the user interface -->
+  <div class=bottomPane align="center" id = "bottomPaneBackground">
+    <!-- the left decoration in the bottom pane -->
+    <img src="pictures/doubleSkullDecorationLeft_.png" width="100px" style="float:left; margin-left: 35px; margin-top: -15px;">
+
+    <!-- defines the pane for the description and the choice buttons -->
+    <div class = "description" id = divDesc"> 
+      <p style="margin-top: -2px;" id = "paraDesc"> (Original description)</p>
+      <div class = "menu" id = divMenu>
+
+        <button class = "button button" style="font-size : 18px;" id="btn1" onclick="actionButton1()" value="btn1">hello</button><br>
+        <button class = "button button" style="font-size : 18px;" id="btn2" onclick="actionButton2()" value="btn2"></button><br>
+        <button class = "button button" style="font-size : 18px;" id="btn3" onclick="actionButton3()" value="btn3"></button>
+        <br>
+        <input type="text" id="riddleAnswer" value="Your answer to the riddle" style="visibility: hidden">
+        <button id="riddleAnswerButton" onclick="riddleAnswerSubmission()" style="visibility: hidden">Submit</button>
+
+      </div>
+    </div>
+
+    <!-- the right decoration in the bottom pane -->
+    <img src="pictures/owlDecorationRight_.png" width="110px" valign="center" style="float: right; margin-left: 40px;">
+
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
