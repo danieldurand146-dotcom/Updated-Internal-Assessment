@@ -31,46 +31,120 @@ var finalBattleSound = new sound("soundEffects/finalBattle.mp3");    // track to
 var gameOverSound = new sound("soundEffects/gameOver.mp3");          // track to play when the protagonist has died
 var myInterval;                                                      // used to fade out the sound tracks
 
-// characteristics of the possible protagonists
-// name, health points, agility, attack points, protection points, face.png, weaponName, weapon.png, protectionName, protection.png
-var protagonist = ["",0,0,0,0,"blank.png","","blank.png","","blank.png"];                                      // characteristics of the protagonist
-var EdrinStoneguard = ["Edrin Stoneguard",29,6,7,5,"EdrinStoneguardFace.png","warhammer","EdrinStoneguardWeapon.png","plate armour","EdrinStoneguardProtection.png"];
-var LysaThornwind = ["Lysa Thornwind",22,9,5,4,"LysaThornwindFace.png","bow and arrow","LysaThornwindWeapon.png","leather tunic","LysaThornwindProtection.png"];
-var CorinAshgleam = ["Corin Ashgleam",18,7,9,3,"CorinAshgleamFace.png","staff","CorinAshgleamWeapon.png","enchanted robes","CorinAshgleamProtection.png"];
-var MiraCoalbrand = ["Mira Coalbrand",24,8,5,4,"MiraCoalbrandFace.png","dual daggers","MiraCoalbrandWeapon.png","leather tunic","MiraCoalbrandProtection.png"];
+// CHARACTER CLASSES
 
-var Elverin = ["Elverin",20,8,5,3,"elfFace.png","bow & arrow","bow&arrow.png","tunic","elfTunic.png"];
-var Brokk = ["Brokk",29,6,7,5,"dwarfFace.png","axe","dwarfAxe.png","shield","dwarfShield.png"];
-var Darvyn = ["Darvyn",23,7,5,3,"travellerFace.png","staff","travellerStaff.png","jacket","travellerJacket.png"];
-var Erukius = ["Erukius",16,7,9,3,"wizardFace.png","spell book","wizardBook.png","cloak","wizardCloak.png"];
+class Character {
+    constructor(name, hp, agility, attack, protection,
+                face, weaponName, weaponImage,
+                protectionName, protectionImage) {
+        this.name = name;
+        this.maxHP = hp;
+        this.hp = hp;
+        this.agility = agility;
+        this.attack = attack;
+        this.protection = protection;
+        this.face = face;
+        this.weaponName = weaponName;
+        this.weaponImage = weaponImage;
+        this.protectionName = protectionName;
+        this.protectionImage = protectionImage;
+    }
 
-// characteristics of the enemies
-//name, health points, agility, attack points, protection points, face.png,weaponName, weapon.png, protectionName, protection.png
-var goblin =  ["forest goblin",15,7,6,2,"goblinFace.png","machete","goblinMachete.png","leather armour","goblinLeatherArmour.png"];
-var troll =  ["mountain troll",26,7,7,2,"trollFace.png","wooden club","trollClub.png","hardened fur","trollProtection.png"];
-var dragon =  ["Izentarth",29,11,9,9,"dragonFace.png","fire breath","dragonFire.png","dragon scales","dragonScales.png"];
-var enemy = [];
+  // Create a separate copy of the character so changes to its health during the game do not affect the original character
+    clone() {
+        const copy = new this.constructor(
+            this.name,
+            this.maxHP,
+            this.agility,
+            this.attack,
+            this.protection,
+            this.face,
+            this.weaponName,
+            this.weaponImage,
+            this.protectionName,
+            this.protectionImage
+        );
+        // Copy the character's current health points to the new character
+        copy.hp = this.hp;
+        return copy;
+    }
+}
+
+class Protagonist extends Character {                      // Protagonists inherit the shared properties from Character
+}
+
+class Enemy extends Character {                            // Enemies inherit the shared properties from Character
+}
+
+// PROTAGONISTS
+
+const EdrinStoneguard = new Protagonist(
+    "Edrin Stoneguard", 29, 6, 7, 5,
+    "EdrinStoneguardFace.png",
+    "warhammer", "EdrinStoneguardWeapon.png",
+    "plate armour", "EdrinStoneguardProtection.png"
+);
+
+const LysaThornwind = new Protagonist(
+    "Lysa Thornwind", 22, 9, 5, 4,
+    "LysaThornwindFace.png",
+    "bow and arrow", "LysaThornwindWeapon.png",
+    "leather tunic", "LysaThornwindProtection.png"
+);
+
+const CorinAshgleam = new Protagonist(
+    "Corin Ashgleam", 18, 7, 9, 3,
+    "CorinAshgleamFace.png",
+    "staff", "CorinAshgleamWeapon.png",
+    "enchanted robes", "CorinAshgleamProtection.png"
+);
+
+const MiraCoalbrand = new Protagonist(
+    "Mira Coalbrand", 24, 8, 5, 4,
+    "MiraCoalbrandFace.png",
+    "dual daggers", "MiraCoalbrandWeapon.png",
+    "leather tunic", "MiraCoalbrandProtection.png"
+);
+
+// ENEMIES
+
+const goblin = new Enemy(
+    "forest goblin", 15, 7, 6, 2,
+    "goblinFace.png",
+    "machete", "goblinMachete.png",
+    "leather armour", "goblinLeatherArmour.png"
+);
+
+const troll = new Enemy(
+    "mountain troll", 26, 7, 7, 2,
+    "trollFace.png",
+    "wooden club", "trollClub.png",
+    "hardened fur", "trollProtection.png"
+);
+
+const dragon = new Enemy(
+    "Izentarth", 29, 11, 9, 9,
+    "dragonFace.png",
+    "fire breath", "dragonFire.png",
+    "dragon scales", "dragonScales.png"
+);
+
+// The currently selected protagonist and active enemy
+var protagonist = null;
+var enemy = null;
 
 // shortcuts used while debugging
-//situation = 6;
-//protagonist = ["Edrin Stoneguard",29,6,7,5,"EdrinStoneguardFace.png","warhammer","EdrinStoneguardWeapon.png","plate armour","EdrinStoneguardProtection.png"];
-//protagonist = ["Lysa Thornwind",22,9,5,4,"LysaThornwindFace.png","bow and arrow","LysaThornwindWeapon.png","leather tunic","LysaThornwindProtection.png"];
-//protagonist = ["Corin Ashgleam",18,7,9,3,"CorinAshgleamFace.png","staff","CorinAshgleamWeapon.png","enchanted robes","CorinAshgleamProtection.png"];
-//protagonist = ["Mira Coalbrand",24,8,5,4,"MiraCoalbrandFace.png","dual daggers","MiraCoalbrandWeapon.png","leather tunic","MiraCoalbrandProtection.png"];
-//protagonist = ["Elverin",20,8,5,3,"elfFace.png","bow & arrow","bow&arrow.png","tunic","elfTunic.png"];
-//protagonist = ["Brökk",29,6,7,5,"dwarfFace.png","axe","dwarfAxe.png","shield","dwarfShield.png"];
-//protagonist = ["Darvyn",23,7,5,3,"travellerFace.png","staff","travellerStaff.png","jacket","travellerJacket.png"];
-//protagonist = ["Erukius",16,7,9,3,"wizardFace.png","spell book","wizardBook.png","cloak","wizardCloak.png"];
-//protagonist[1] = 3;
-//goldCoins = 1;
-//protagonist[1] = 10;
+// situation = 6;
+// protagonist = EdrinStoneguard.clone();
+// protagonist.hp = 3;
+// goldCoins = 1;
 
 const description = [];   // contains the description for every situation
 description[0] = "First, you must decide the character that you will incarnate.";
-description[1] = "Edrin Stoneguard is the eldest child of the village blacksmith, raised among anvils and steel he is known as the dependable shield of his home. <br><br> - health points: " + EdrinStoneguard[1] + " <br> - agility: " + EdrinStoneguard[2] + "<br> - weapon: warhammer (" + EdrinStoneguard[3] + " attack points) <br> - protection: plate armour (" + EdrinStoneguard[4] + " resistance points)";
-description[2] = "Lysa Thornwind is the sharp-eyed daughter of the village hunter, raised tracking game through dense woods and scaling rooftops, making her a swift shadow in any skirmish. <br><br> - health points: " + LysaThornwind[1] + "<br> - agility: " + LysaThornwind[2] + "<br> - weapon: longbow (" + LysaThornwind[3] + " attack points) <br> - protection: leather tunic (" + LysaThornwind[4] + " resistance points)";
-description[3] = "Corin Ashgleam is the thoughtful apprentice to the village elder, immersed in ancient scrolls and omens from a young age, channeling his arcane knowledge to support his companions. <br><br> - health points: " + CorinAshgleam[1] + " <br> - agility: " + CorinAshgleam[2] + "<br> - weapon: light staff (" + CorinAshgleam[3] + " attack points) <br> - protection: enchanted robes (" + CorinAshgleam[4] + " resistance points)";
-description[4] = "Mira Coalbrand is the street-smart former chimney-sweep and odd-job runner from the village, honed by years of climbing tight spaces and dodging trouble, turning her into a deadly shadow in close-quarters ambushes.<br><br> - health points: " + MiraCoalbrand[1] + " <br> - agility: " + MiraCoalbrand[2] + "<br> - weapon: dual daggers (" + MiraCoalbrand[3] + " attack points) <br> - protection: leather tunic (" + MiraCoalbrand[4] + " resistance points)";
+description[1] = "Edrin Stoneguard is the eldest child of the village blacksmith, raised among anvils and steel he is known as the dependable shield of his home. <br><br> - health points: " + EdrinStoneguard.hp + " <br> - agility: " + EdrinStoneguard.agility + "<br> - weapon: warhammer (" + EdrinStoneguard.attack + " attack points) <br> - protection: plate armour (" + EdrinStoneguard.protection + " resistance points)";
+description[2] = "Lysa Thornwind is the sharp-eyed daughter of the village hunter, raised tracking game through dense woods and scaling rooftops, making her a swift shadow in any skirmish. <br><br> - health points: " + LysaThornwind.hp + "<br> - agility: " + LysaThornwind.agility + "<br> - weapon: longbow (" + LysaThornwind.attack + " attack points) <br> - protection: leather tunic (" + LysaThornwind.protection + " resistance points)";
+description[3] = "Corin Ashgleam is the thoughtful apprentice to the village elder, immersed in ancient scrolls and omens from a young age, channeling his arcane knowledge to support his companions. <br><br> - health points: " + CorinAshgleam.hp + " <br> - agility: " + CorinAshgleam.agility + "<br> - weapon: light staff (" + CorinAshgleam.attack + " attack points) <br> - protection: enchanted robes (" + CorinAshgleam.protection + " resistance points)";
+description[4] = "Mira Coalbrand is the street-smart former chimney-sweep and odd-job runner from the village, honed by years of climbing tight spaces and dodging trouble, turning her into a deadly shadow in close-quarters ambushes.<br><br> - health points: " + MiraCoalbrand.hp + " <br> - agility: " + MiraCoalbrand.agility + "<br> - weapon: dual daggers (" + MiraCoalbrand.attack + " attack points) <br> - protection: leather tunic (" + MiraCoalbrand.protection + " resistance points)";
 description[5] = "You have been on this quest for so long that you barely remember when it started. After an interminable journey across the Okoto Steppes, you have just reached the sprawling forest of Akkar. You need to cross it. Then, you will have to traverse the nauseous swamps of Kutagul to reach the high mountain of Hastmeuse. There, you must find the cave and follow the tunnel into the depths of the mountain and, if your information is correct, you will find the legendary treasure of Izentarth, the last fire breather.  ";
 description[6] = "After a short walk, you meet an old man chopping wood. When he sees you, he stops and asks for alms: 'Hail traveller, could you please spare some money? My wife is ill and I need to buy her medicine from the healer.";
 description[8] = "The old man: 'Thank you good lord! You are very generous but you don't seem to be from around here and the forest is treacherous. Take this map, it will help you find your way.'";
@@ -238,12 +312,11 @@ function riddleAnswerSubmission() {
   else {
     situation = 35;
     description[35] = "<font size=6>'HA HA HA! That is the WRRRONG answer! I am going to crrrush you!'</font><br>";
-    for (let i = 0; i <= 9; i++)
-        {enemy[i] = troll[i];}
+    enemy = troll.clone();
       displayEnemyInfo();
       attacker = whoAttacksFirst();
-      if (attacker == protagonist[0]) {
-        description[35] += "You are more agile than the " + enemy[0] + " so you get to start the fight.";}
+      if (attacker == protagonist.name) {
+        description[35] += "You are more agile than the " + enemy.name + " so you get to start the fight.";}
       else {
         description[35] += "Your enemy is more agile, so he gets to start the fight.";}
   }
@@ -269,7 +342,7 @@ function showDragonAreas() {
 
 // defines the consequences of clicking on the dragon's wings during combats
 function hitWings() {
-  if (attacker == protagonist[0]) {
+  if (attacker == protagonist.name) {
     description[situation] = "Your blow bounces straight off the tight scales of Izentarth's wing leaving him unscathed.<br>Now, the dragon's throat starts to glow bright red.";
     button1Texts[situation] = "Try to avoid Izentarth's scorching blast!";
     transitionButton1[situation] = situation;
@@ -279,7 +352,7 @@ function hitWings() {
 
 // defines the consequences of clicking on the dragon's eyes during combats
 function hitEyes() {
-  if (attacker == protagonist[0]) {
+  if (attacker == protagonist.name) {
     description[situation] = "The dragon sees the blow coming and protects himself with his wing that he uses like a shield. Your attack bounces off Izentarth's scaly wing leaving him unscathed.<br>The dragon's throat starts radiating red light. He is about to breathe fire!";
     button1Texts[situation] = "Try to avoid Izentarth's scorching blast!";
     transitionButton1[situation] = situation;
@@ -289,7 +362,7 @@ function hitEyes() {
 
 // defines the consequences of clicking on the dragon's forehead during combats
 function hitForehead() {
-  if (attacker == protagonist[0]) {
+  if (attacker == protagonist.name) {
     description[situation] = "The dragon swings his head to the side and avoids your attack. You have missed your target.<br>You can see heat building up inside Izentarth's gorge!";
     button1Texts[situation] = "Try to avoid Izentarth's scorching blast!";
     transitionButton1[situation] = situation;
@@ -299,7 +372,7 @@ function hitForehead() {
 
 // defines the consequences of clicking on the dragon's arm during combats
 function hitRightArm() {
-  if (attacker == protagonist[0]) {
+  if (attacker == protagonist.name) {
     description[situation] = "Despite seeing your attack, the dragon doesn't budge. Your shot hits the dragon's arm but is deflected as if it were nothing.<br>Watch out! Izentarth is about to attack!";
     button1Texts[situation] = "Try to avoid Izentarth's scorching blast!";
     transitionButton1[situation] = situation;
@@ -309,7 +382,7 @@ function hitRightArm() {
 
 // defines the consequences of clicking on the dragon's snout during combats
 function hitMouth() {
-  if (attacker == protagonist[0]) {
+  if (attacker == protagonist.name) {
     description[situation] = "Izentarth fends off your attack with his scaly arm. Your shot has no impact on the powerful dragon.<br>Smoke blasts out of his snout.";
     button1Texts[situation] = "Try to avoid the incoming blast!";
     transitionButton1[situation] = situation;
@@ -319,13 +392,13 @@ function hitMouth() {
 
 // defines the consequences of clicking on the dragon's left horn during combats
 function hitLeftHorn() {
-  if (attacker == protagonist[0]) {
+  if (attacker == protagonist.name) {
     dragonHurtSound.play();
     if (situation == 46) {
       // the dragon has not yet lost his right horn
       document.getElementById("leftHorn").style.cursor = "default";
       situation = 47;
-      enemy[1] -= 15;
+      enemy.hp -= 15;
       button1Texts[situation] = "Try to avoid the incoming blast!";
       attacker = "dragon";
       drawEnemyHealthPoints(nbMaxHealthPoints);
@@ -335,7 +408,7 @@ function hitLeftHorn() {
       // the dragon has lost both horns
       document.getElementById("leftHorn").style.cursor = "default";
       situation = 49;
-      enemy[1] = 0;
+      enemy.hp = 0;
       drawEnemyHealthPoints(nbMaxHealthPoints);
       updatePage();}
   }
@@ -343,13 +416,13 @@ function hitLeftHorn() {
 
 // defines the consequences of clicking on the dragon's right horn during combats
 function hitRightHorn() {
-  if (attacker == protagonist[0]) {
+  if (attacker == protagonist.name) {
     dragonHurtSound.play();
     if (situation == 46) {
       // the dragon has not lost his left horn
       document.getElementById("rightHorn").style.cursor = "default";
       situation = 48;
-      enemy[1] -= 15;
+      enemy.hp -= 15;
       button1Texts[situation] = "Try to avoid the incoming blast!";
       attacker = "dragon";
       drawEnemyHealthPoints(nbMaxHealthPoints);
@@ -359,7 +432,7 @@ function hitRightHorn() {
       // the dragon has lost both horns
       document.getElementById("rightHorn").style.cursor = "default";
       situation = 49;
-      enemy[1] = 0;
+      enemy.hp = 0;
       drawEnemyHealthPoints(nbMaxHealthPoints);
       updatePage();}
   }
@@ -369,7 +442,7 @@ function hitRightHorn() {
 function drawHealthPoints(nbMaxHP) {
   for (let i = 1; i <= nbMaxHP; i++) {
     var hpNumber = 'hp' + i.toString()
-    if (protagonist[1] >= i) {
+    if (protagonist.hp >= i) {
     document.getElementById(hpNumber).src = "pictures/1hp.jpg";}
   else {
     document.getElementById(hpNumber).src = "pictures/nohp.jpg";}
@@ -381,7 +454,7 @@ function drawEnemyHealthPoints(nbMaxHP) {
   for (let i = 1; i <= nbMaxHP; i++) {
     var hpNumber = 'enemyHp' + i.toString();
     document.getElementById(hpNumber).style.visibility = 'visible';
-    if (enemy[1] >= i) {
+    if (enemy.hp >= i) {
       document.getElementById(hpNumber).src = "pictures/1hp.jpg";
     }
     else {
@@ -393,35 +466,35 @@ function drawEnemyHealthPoints(nbMaxHP) {
 // the protagonist drinks the potion
 function clickInventoryImg3() {
   if (haveHealthPotion == true) {
-    protagonist[1] = maxHP;
+    protagonist.hp = maxHP;
     drinkSound.play();
-    drawHealthPoints(protagonist[1]);
+    drawHealthPoints(protagonist.hp);
     haveHealthPotion = false;
     document.getElementById("inventoryImg3").style.visibility = "hidden";}
 }
 
 // displays the protagonist's characteristics
 function displayCharacterInfo() {
-  document.getElementById("characterFace").src = "pictures/" + protagonist[5];
-  document.getElementById("characterName").innerHTML = protagonist[0];
-  document.getElementById("characterWeapon").src = "pictures/" + protagonist[7];
-  document.getElementById("weaponName").innerHTML = protagonist[6] + " (" + protagonist[3] + ")";
-  document.getElementById("characterProtection").src = "pictures/" + protagonist[9];
-  document.getElementById("protectionName").innerHTML = protagonist[8] + " (" + protagonist[4] + ")";
-  document.getElementById("agilityPoints").innerHTML = "       inventory        HP              agility: " + protagonist[2] + " scene:" + situation + "                                                                                                                                                                          ";
+  document.getElementById("characterFace").src = "pictures/" + protagonist.face;
+  document.getElementById("characterName").innerHTML = protagonist.name;
+  document.getElementById("characterWeapon").src = "pictures/" + protagonist.weaponImage;
+  document.getElementById("weaponName").innerHTML = protagonist.weaponName + " (" + protagonist.attack + ")";
+  document.getElementById("characterProtection").src = "pictures/" + protagonist.protectionImage;
+  document.getElementById("protectionName").innerHTML = protagonist.protectionName + " (" + protagonist.protection + ")";
+  document.getElementById("agilityPoints").innerHTML = "       inventory        HP              agility: " + protagonist.agility + "                                                                                                                                                                          ";
   if (inCombat == true) {
-    document.getElementById("agilityPoints").innerHTML += "agility: " + enemy[2];}
-  //document.getElementById("agilityPoints").innerHTML = "       inventory        HP              agility: " + protagonist[2] + "        situation:" + situation;
+    document.getElementById("agilityPoints").innerHTML += "         agility: " + enemy.agility;}
+  //document.getElementById("agilityPoints").innerHTML = "       inventory        HP              agility: " + protagonist.agility + "        situation:" + situation;
 }
 
 // displays the enemy's characteristics
 function displayEnemyInfo() {
-  document.getElementById("enemyFace").src = "pictures/" + enemy[5];
-  document.getElementById("enemyName").innerHTML = enemy[0];
-  document.getElementById("enemyWeapon").src = "pictures/" + enemy[7];
-  document.getElementById("enemyWeaponName").innerHTML = enemy[6] + " (" + enemy[3] + ")";
-  document.getElementById("enemyProtection").src = "pictures/" + enemy[9];
-  document.getElementById("enemyProtectionName").innerHTML = enemy[8] + " (" + enemy[4] + ")";
+  document.getElementById("enemyFace").src = "pictures/" + enemy.face;
+  document.getElementById("enemyName").innerHTML = enemy.name;
+  document.getElementById("enemyWeapon").src = "pictures/" + enemy.weaponImage;
+  document.getElementById("enemyWeaponName").innerHTML = enemy.weaponName + " (" + enemy.attack + ")";
+  document.getElementById("enemyProtection").src = "pictures/" + enemy.protectionImage;
+  document.getElementById("enemyProtectionName").innerHTML = enemy.protectionName + " (" + enemy.protection + ")";
   document.getElementById('enemyHpPane').style.visibility = 'visible';
   drawEnemyHealthPoints(nbMaxHealthPoints);
 }
@@ -471,10 +544,10 @@ function mouseOutMap () {
 
 // decides who launches the first assault during a combat
 function whoAttacksFirst() {
-  if (protagonist[2] >= enemy[2]) {
-    return protagonist[0];}
+  if (protagonist.agility >= enemy.agility) {
+    return protagonist.name;}
   else {
-    return enemy[0];}
+    return enemy.name;}
 }
 
 // manages combats
@@ -482,18 +555,18 @@ function combatTurn() {
   var attack;      // determines the strength of the attack
   var block;       // determines the strength of the block
   button1Texts[situation] = "carry on fighting";
-  if (attacker == protagonist[0]) {
+  if (attacker == protagonist.name) {
     //protagonist attacks
-    attack = protagonist[2] + Math.floor(Math.random() * randomComponent);
-    block = enemy[2] + Math.floor(Math.random() * randomComponent);
+    attack = protagonist.agility + Math.floor(Math.random() * randomComponent);
+    block = enemy.agility + Math.floor(Math.random() * randomComponent);
     description[situation] = "You attack with " + attack + " attack points.<br>";
     if (attack > block) {
       //the protagonist has hit the enemy
       hissSound.play();
-      enemy[1] -= protagonist[3] - enemy[4];
-      description[situation] += "The " + enemy[0] + " tries to block with " + block + " defense points.<br> He fails to block your attack";
-      if (enemy[1] > 0) {
-        description[situation] += " and loses " + (protagonist[3] - enemy[4]) + " health points.";}
+      enemy.hp -= protagonist.attack - enemy.protection;
+      description[situation] += "The " + enemy.name + " tries to block with " + block + " defense points.<br> He fails to block your attack";
+      if (enemy.hp > 0) {
+        description[situation] += " and loses " + (protagonist.attack - enemy.protection) + " health points.";}
       else {
         //the enemy is slain
         inCombat = false;
@@ -504,13 +577,13 @@ function combatTurn() {
             description[15] += " and he collapses with a roar. You have slain the goblin.<br>You find one gold coin by the goblin's purse.";
             break;
           case 19:
-            description[19] += ". He collapses with a roar before falling into the water and sinks. You have slain the " + enemy[0] + ". Behind you, the other goblin is approaching fast so you dash to get off the bridge and into the forest. You manage to outrun the goblin.";
+            description[19] += ". He collapses with a roar before falling into the water and sinks. You have slain the " + enemy.name + ". Behind you, the other goblin is approaching fast so you dash to get off the bridge and into the forest. You manage to outrun the goblin.";
             break;
           case 35:
             description[35] += ". He wobbles and falls off the cliff. You have slain the mountain troll.<br>You may now go to the bridge.";
             break;
           default:
-          description[situation] += " and collapses on the ground. You have slain the " + enemy[0] + ".";}
+          description[situation] += " and collapses on the ground. You have slain the " + enemy.name + ".";}
         description[situation + 1] = description[situation];
         transitionButton1[situation] = situation + 1;
         button1Texts[situation] = "continue";
@@ -520,20 +593,20 @@ function combatTurn() {
     else {
       //the enemy has blocked the attack
       chink2Sound.play();
-    description[situation] += "The " + enemy[0] + " tries to block with " + block + " defense points.<br> He successfully blocks your attack.";}  
-    attacker = enemy[0];
+    description[situation] += "The " + enemy.name + " tries to block with " + block + " defense points.<br> He successfully blocks your attack.";}  
+    attacker = enemy.name;
   }
   else {
     //enemy attacks
-    attack = enemy[2] + Math.floor(Math.random() * randomComponent);
-    block = protagonist[2] + Math.floor(Math.random() * randomComponent);
-    description[situation] = "The " + enemy[0] + " attacks with " + attack + " attack points.<br>";
+    attack = enemy.agility + Math.floor(Math.random() * randomComponent);
+    block = protagonist.agility + Math.floor(Math.random() * randomComponent);
+    description[situation] = "The " + enemy.name + " attacks with " + attack + " attack points.<br>";
     if (attack > block) {
       //the enemy has hit the protagonist
-      protagonist[1] -= enemy[3] - protagonist[4];
+      protagonist.hp -= enemy.attack - protagonist.protection;
       description[situation] += "You try to block with " + block + " defense points.<br> You fail to block his attack";
-      if (protagonist[1] > 0) {
-        description[situation] += " and lose " + (enemy[3] - protagonist[4]) + " health points.";
+      if (protagonist.hp > 0) {
+        description[situation] += " and lose " + (enemy.attack - protagonist.protection) + " health points.";
         umphSound.play();}
       else {
         //the protagonist has died
@@ -553,7 +626,7 @@ function combatTurn() {
       chinkSound.play();
       description[situation] += "You try to block with " + block + " defense points.<br> You successfully block his attack.";
     }
-  attacker = protagonist[0];
+  attacker = protagonist.name;
   }
 }
 
@@ -562,15 +635,15 @@ function dragonAttacks() {
   var attack;    // determines the strength of the dragon's attack
   var dodge;     // determines the quality of the protagonist's dodge
   //dragon attacks
-    attack = enemy[2] + Math.floor(Math.random() * randomComponent);
-    dodge = protagonist[2] + Math.floor(Math.random() * randomComponent);
+    attack = enemy.agility + Math.floor(Math.random() * randomComponent);
+    dodge = protagonist.agility + Math.floor(Math.random() * randomComponent);
     description[46] = "Izentarth attacks with " + attack + " attack points.<br>";
     if (attack > dodge) {
       //the dragon has hit the protagonist
       description[46] += "You try to dodge with " + dodge + " points.<br> You fail to avoid the flames";
-      protagonist[1] -= enemy[3] - protagonist[4];
-      if (protagonist[1] > 0) {
-        description[46] += " and lose " + (enemy[3] - protagonist[4]) + " health points.";
+      protagonist.hp -= enemy.attack - protagonist.protection;
+      if (protagonist.hp > 0) {
+        description[46] += " and lose " + (enemy.attack - protagonist.protection) + " health points.";
         }
       else {
         //the protagonist has died
@@ -599,9 +672,7 @@ function actionButton1() {
       document.getElementById('headers').style.visibility = 'visible';
       document.getElementById('hpPane').style.visibility = "visible";
       introductionSound.play();
-      for (let i = 0; i <= 9; i++) {
-        protagonist[i] = EdrinStoneguard[i];
-      }
+      protagonist = EdrinStoneguard.clone();
       break;
     case 1:
     case 2:
@@ -614,7 +685,7 @@ function actionButton1() {
       break;
     case 5:
       // we save the protagonist's health points (so that they can be restored when he drinks the health potion)
-      maxHP = protagonist[1];
+      maxHP = protagonist.hp;
       break;
     case 6:
       // the protagonist gives a first coin to the old man
@@ -655,14 +726,13 @@ function actionButton1() {
       break;
     case 14:
       // the protagonist starts a combat against a goblin
-      for (let i = 0; i <= 9; i++)
-        {enemy[i] = goblin[i];}
+      enemy = goblin.clone();
       inCombat = true;
       battleSound.play();
       displayEnemyInfo();
       attacker = whoAttacksFirst();
-      if (attacker == protagonist[0]) {
-        description[15] = "You are more agile than the " + enemy[0] + " so you get to start the fight.";}
+      if (attacker == protagonist.name) {
+        description[15] = "You are more agile than the " + enemy.name + " so you get to start the fight.";}
       else {
         description[15] = "Your enemy is more agile, so he gets to start the fight.";}
       break;
@@ -676,14 +746,13 @@ function actionButton1() {
       break;
     case 18:
       // the protagonist starts a combat against a goblin
-      for (let i = 0; i <= 9; i++)
-        {enemy[i] = goblin[i];}
+      enemy = goblin.clone();
       inCombat = true;
       battleSound.play();
       displayEnemyInfo();
       attacker = whoAttacksFirst();
-      if (attacker == protagonist[0]) {
-        description[19] = "You are more agile than the " + enemy[0] + " so you get to start the fight.";}
+      if (attacker == protagonist.name) {
+        description[19] = "You are more agile than the " + enemy.name + " so you get to start the fight.";}
       else {
         description[19] = "Your enemy is more agile, so he gets to start the fight.";}
       break;
@@ -744,15 +813,14 @@ function actionButton1() {
     case 33:
     case 34:
       // the protagonist engages in a combat aginst the mountain troll
-      for (let i = 0; i <= 9; i++)
-        {enemy[i] = troll[i];}
+      enemy = troll.clone();
       inCombat = true;
       battleSound.volume = 1;
       battleSound.play();
       displayEnemyInfo();
       attacker = whoAttacksFirst();
-      if (attacker == protagonist[0]) {
-        description[35] = "You are more agile than the " + enemy[0] + " so you get to start the fight.";}
+      if (attacker == protagonist.name) {
+        description[35] = "You are more agile than the " + enemy.name + " so you get to start the fight.";}
       else {
         description[35] = "Your enemy is more agile, so he gets to start the fight.";}
       break;
@@ -789,8 +857,7 @@ function actionButton1() {
     case 45:
       // the protagonist engages in the final combat with the dragon 
       document.getElementById('hpPane').style.visibility = "visible";
-      for (let i = 0; i <= 9; i++)
-        {enemy[i] = dragon[i];}
+      enemy = dragon.clone();
       inCombat = true;
       finalBattleSound.play();
       displayEnemyInfo();
@@ -799,17 +866,17 @@ function actionButton1() {
       document.getElementById("pageBackground").style.backgroundColor="#97000F";
       document.getElementById("bottomPaneBackground").style.backgroundColor="#97000F";
       // the protagonist launches the first assault
-      attacker = protagonist[0];
+      attacker = protagonist.name;
       break;
     case 46:
     case 47:
     case 48:
       dragonAttacks();
-      if (protagonist[1] > 0)
+      if (protagonist.hp > 0)
         {//it is now the protagonist's turn to attack
          description[situation] += "<br><br>Click again on the body part of the dragon you want to hit.";
          transitionButton1[situation] = 0;
-         attacker = protagonist[0];}
+         attacker = protagonist.name;}
       else {situation = 50;}
       break;
     case 51:
@@ -834,22 +901,16 @@ function actionButton2() {
   switch (situation) {
     case 2:
       // the user is browsing Edrin Stoneguard
-      for (let i = 0; i <= 9; i++) {
-        protagonist[i] = EdrinStoneguard[i];
-      }
+      protagonist = EdrinStoneguard.clone();
       break;
     case 1:
     case 3:
       // the user is browsing Lysa Thornwind
-      for (let i = 0; i <= 9; i++) {
-        protagonist[i] = LysaThornwind[i];
-      }
+      protagonist = LysaThornwind.clone();
       break;
     case 4:
       // the user is browsing Corin Ashgleam
-      for (let i = 0; i <= 9; i++) {
-        protagonist[i] = CorinAshgleam[i];
-      }
+      protagonist = CorinAshgleam.clone();
       break;
     case 6:
       description[9] = "The path leads to a twisted tree with bright purple leaves and splits: the main path continues on the right while a small trail starts on the left.";
@@ -857,25 +918,25 @@ function actionButton2() {
       break;
     case 13:
       // protagonist is ambushed and hit by the forest goblin
-      protagonist[1] -= 2;
+      protagonist.hp -= 2;
       umphSound.play();
       break;
     case 14:
-      if (protagonist[2] > 5) {
+      if (protagonist.agility > 5) {
         // the protagonist manages to flee from the goblin 
         description[13] = "The goblin produces a high pitch shriek and follows you but you manage to outrun him. <br>You are now back at the bridge";
         transitionButton2[13] = 0;}
       else {
         // the forest goblin catches up with the protagonist
         description[14] = "The goblin produces a high pitch shriek and runs after you. He catches you and slashes you in the back.<br><b>You lose another health point</b>Now, you must fight the goblin.";
-        protagonist[1] -= 1;
+        protagonist.hp -= 1;
         umphSound.play();
         transitionButton2[14] = 15;} 
       break;
     case 21:
       // the protagonist suffers from food poisoning (mushrooms)
-      protagonist[1] -= 3;
-      if (protagonist[1] <= 0) {
+      protagonist.hp -= 3;
+      if (protagonist.hp <= 0) {
         //protagonist has died (poisoned by mushrooms)
         description[25] += "You were already weak so couldn't survive the poisoning.";
         button1Texts[25] = "Click here";
@@ -904,15 +965,11 @@ function actionButton3() {
   switch (situation) {
     case 2:
       // the user is browsing Corin Ashgleam
-      for (let i = 0; i <= 9; i++) {
-        protagonist[i] = CorinAshgleam[i];
-      }
+      protagonist = CorinAshgleam.clone();
     break;
     case 3:
       // the user is browsing Mira Coalbrand
-      for (let i = 0; i <= 9; i++) {
-        protagonist[i] = MiraCoalbrand[i];
-      }
+      protagonist = MiraCoalbrand.clone();
     break;
     case 9:
       // the protagonist meets the old man again
@@ -973,6 +1030,322 @@ function updatePage() {
 
   //update menu
   displayButtons();
+}
+
+// SAVE AND LOAD GAME
+
+// Restore background colour
+function restoreBackgroundColour() {
+  // Default background colour
+  var pageColour = "";
+  var bottomColour = "";
+  switch (situation) {
+
+    // Character selection
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+      pageColour = "#005e00";
+      bottomColour = "#005e00";
+      break;
+
+    // Nightfall in the forest
+    case 25:
+      pageColour = "#003200";
+      bottomColour = "#003200";
+      break;
+
+    // Cave
+    case 39:
+    case 40:
+    case 41:
+    case 42:
+    case 43:
+    case 44:
+      pageColour = "#2e2e2e";
+      bottomColour = "#2e2e2e";
+      break;
+
+    // Final dragon battle
+    case 45:
+    case 46:
+    case 47:
+    case 48:
+    case 49:
+      pageColour = "#97000F";
+      bottomColour = "#97000F";
+      break;
+
+    // Game over
+    case 50:
+      pageColour = "#640046";
+      bottomColour = "#640046";
+      break;
+
+    // Morning after defeating the dragon
+    case 51:
+      pageColour = "#0095dd";
+      bottomColour = "#0095dd";
+      break;
+
+    // Everything else
+    default:
+      break;
+  }
+
+  // Only change the colours when this situation
+  // has a special background colour.
+  if (pageColour != "") {
+
+    document.getElementById("pageBackground").style.backgroundColor =
+      pageColour;
+
+    document.getElementById("bottomPaneBackground").style.backgroundColor =
+      bottomColour;
+  }
+}
+
+// ------------------------------------------------------------
+// SAVE GAME
+// ------------------------------------------------------------
+
+function saveGame() {
+
+  // Work out which character was selected.
+  // We save the name rather than the entire protagonist array.
+  var characterName = protagonist.name;
+
+  // Work out which enemy is currently being fought.
+  // We only need this if the player saves during combat.
+  var enemyName = "";
+
+  if (enemy !== null) {
+    enemyName = enemy.name;
+  }
+
+  // Create a simple text save file.
+  // Only variables that can change during the game are saved.
+  var saveString =
+    "IZENTARTH_SAVE_V1\n" +
+    "character=" + characterName + "\n" +
+    "situation=" + situation + "\n" +
+    "hp=" + protagonist.hp + "\n" +
+    "goldCoins=" + goldCoins + "\n" +
+    "coinsToOldMan=" + coinsToOldMan + "\n" +
+    "beenIn13=" + beenIn13 + "\n" +
+    "haveHealthPotion=" + haveHealthPotion + "\n" +
+    "correctRiddleAnswer=" + correctRiddleAnswer + "\n" +
+    "attacker=" + attacker + "\n" +
+    "inCombat=" + inCombat + "\n" +
+    "enemy=" + enemyName + "\n" +
+    "enemyHP=" + (enemy !== null ? enemy.hp : 0) + "\n" +
+    "pageColour=" + document.getElementById("pageBackground").style.backgroundColor + "\n" +
+    "bottomColour=" + document.getElementById("bottomPaneBackground").style.backgroundColor + "\n";
+
+  // Create the text file.
+  var saveFile = new Blob(
+    [saveString],
+    {type: "text/plain"}
+  );
+
+  // Create a temporary download link.
+  var downloadLink = document.createElement("a");
+  var saveURL = URL.createObjectURL(saveFile);
+
+  downloadLink.href = saveURL;
+  downloadLink.download = "Izentarth_Save.txt";
+
+  // Download the file.
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+  document.body.removeChild(downloadLink);
+
+  // Remove the temporary URL.
+  setTimeout(function() {
+    URL.revokeObjectURL(saveURL);
+  }, 1000);
+
+  alert("Game saved successfully!");
+}
+
+
+// ------------------------------------------------------------
+// LOAD GAME
+// ------------------------------------------------------------
+
+// Opens the file selector.
+function loadGame() {
+  document.getElementById("saveFile").click();
+}
+
+
+// READ SAVE FILE
+
+function readSaveFile(event) {
+  var file = event.target.files[0];
+  if (!file) {
+    return;
+  }
+  var reader = new FileReader();
+  reader.onload = function(event) {
+    try {
+      var saveText = event.target.result;
+
+      // Split the text file into separate lines.
+      var lines = saveText.split(/\r?\n/);
+      // Object that will temporarily contain the saved values.
+      var saveData = {};
+
+      // Read each line.
+      for (var i = 0; i < lines.length; i++) {
+        var line = lines[i];
+        // Ignore empty lines.
+        if (line.trim() === "") {
+          continue;
+        }
+        // The first line identifies this as an Izentarth save.
+        if (i === 0) {
+          if (line.trim() !== "IZENTARTH_SAVE_V1") {
+            throw new Error("Invalid save file");
+          }
+          continue;
+        }
+        // Separate "variable=value".
+        var equalsPosition = line.indexOf("=");
+        if (equalsPosition === -1) {
+          continue;
+        }
+        var variable = line.substring(0, equalsPosition);
+        var value = line.substring(equalsPosition + 1);
+
+        saveData[variable] = value;
+      }
+
+      // RESTORE BASIC GAME STATE
+
+      situation = Number(saveData.situation);
+      goldCoins = Number(saveData.goldCoins);
+      coinsToOldMan = Number(saveData.coinsToOldMan);
+      beenIn13 = saveData.beenIn13 === "true";
+      haveHealthPotion =
+        saveData.haveHealthPotion === "true";
+      correctRiddleAnswer =
+        saveData.correctRiddleAnswer === "true";
+      attacker = saveData.attacker;
+      inCombat = saveData.inCombat === "true";
+      document.getElementById("pageBackground").style.backgroundColor = saveData.pageColour;
+      document.getElementById("bottomPaneBackground").style.backgroundColor = saveData.bottomColour;
+
+
+      // RESTORE THE CHARACTER
+
+      switch (saveData.character) {
+
+        case "Edrin Stoneguard":
+          protagonist = EdrinStoneguard.clone();
+          break;
+
+        case "Lysa Thornwind":
+          protagonist = LysaThornwind.clone();
+          break;
+
+        case "Corin Ashgleam":
+          protagonist = CorinAshgleam.clone();
+          break;
+
+        case "Mira Coalbrand":
+          protagonist = MiraCoalbrand.clone();
+          break;
+
+        default:
+          throw new Error("Unknown character");
+      }
+
+      // Restore the player's current HP and original maximum HP.
+      protagonist.hp = Number(saveData.hp);
+      maxHP = protagonist.maxHP;
+
+      // RESTORE ENEMY
+
+      enemy = null;
+      if (saveData.enemy === "forest goblin") {
+        enemy = goblin.clone();
+      }
+      else if (saveData.enemy === "mountain troll") {
+        enemy = troll.clone();
+      }
+      else if (saveData.enemy === "Izentarth") {
+        enemy = dragon.clone();
+      }
+
+      // Restore the enemy's current HP.
+      if (enemy !== null) {
+        enemy.hp = Number(saveData.enemyHP);
+      }
+
+      // RESTORE THE DISPLAY
+
+      // Show the correct scene.
+      document.getElementById("view").src =
+        "scenes/scene" + situation + ".jpg";
+
+      // Restore the background colour for this situation.
+      restoreBackgroundColour();
+
+      // Show/hide the inventory and HP depending on the situation.
+      if (situation != 0) {
+        document.getElementById("inventory").style.visibility =
+          "visible";
+        document.getElementById("headers").style.visibility =
+          "visible";
+        document.getElementById("hpPane").style.visibility =
+          "visible";
+      }
+      else {
+        document.getElementById("inventory").style.visibility =
+          "hidden";
+        document.getElementById("headers").style.visibility =
+          "hidden";
+        document.getElementById("hpPane").style.visibility =
+          "hidden";
+      }
+
+      // Restore the player's health display.
+      if (situation != 0) {
+        drawHealthPoints(nbMaxHealthPoints);
+        displayCharacterInfo();
+      }
+
+      // Restore the enemy display.
+      if (inCombat == true && enemy !== null) {
+        document.getElementById("hpPane").style.visibility =
+          "visible";
+        displayEnemyInfo();
+      }
+      else {
+        hideEnemyInfo();
+      }
+
+      // Hide the riddle input when loading.
+      document.getElementById("riddleAnswer").style.visibility =
+        "hidden";
+      document.getElementById("riddleAnswerButton").style.visibility =
+        "hidden";
+
+      // Update the description and buttons.
+      updatePage();
+      alert("Game loaded successfully!");
+    }
+    catch (error) {
+      console.log(error);
+      alert("This is not a valid Izentarth save file.");
+    }
+  };
+  reader.readAsText(file);
+
+  // Allow the same save file to be selected again.
+  event.target.value = "";
 }
 
 //The main program
